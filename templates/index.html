@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Complaint Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: #d6ebd4;
+            color: #2b3a2c;
+            padding: 24px 16px;
+            min-height: 100vh;
+        }
+
+        .header-title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 500;
+            color: #1e3a1f;
+            margin-bottom: 24px;
+        }
+
+        .form-card {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 12px;
+            padding: 36px 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2b3a2c;
+            margin-bottom: 8px;
+        }
+
+        .helper-text {
+            display: block;
+            font-size: 12px;
+            color: #555555;
+            margin-top: 5px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #9e9e9e;
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 42px;
+            padding: 8px 12px;
+            border: 1px solid #c4c4c4;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333333;
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-with-icon .form-input {
+            padding-left: 38px;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #43a047;
+            box-shadow: 0 0 0 2px rgba(67, 160, 71, 0.15);
+        }
+
+        .half-width {
+            max-width: 260px;
+        }
+
+        .radio-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-card {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            border: 1px solid #c4c4c4;
+            border-radius: 4px;
+            background-color: #ffffff;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .radio-card:hover {
+            border-color: #43a047;
+            background-color: #fcfdfc;
+        }
+
+        .radio-card input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #757575;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            margin-right: 12px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .radio-card input[type="radio"]:checked {
+            border-color: #43a047;
+        }
+
+        .radio-card input[type="radio"]:checked::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 9px;
+            height: 9px;
+            background-color: #43a047;
+            border-radius: 50%;
+        }
+
+        .radio-card .radio-label {
+            font-size: 14px;
+            color: #333333;
+            user-select: none;
+        }
+
+        .form-textarea {
+            width: 100%;
+            min-height: 110px;
+            padding: 12px;
+            border: 1px solid #c4c4c4;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #333333;
+            resize: vertical;
+        }
+
+        .acknowledgement-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 24px;
+            margin-bottom: 28px;
+        }
+
+        .acknowledgement-box input[type="checkbox"] {
+            margin-top: 3px;
+            width: 16px;
+            height: 16px;
+            accent-color: #43a047;
+            cursor: pointer;
+        }
+
+        .acknowledgement-box label {
+            font-size: 13px;
+            line-height: 1.45;
+            color: #2b3a2c;
+            cursor: pointer;
+        }
+
+        .submit-container {
+            text-align: center;
+        }
+
+        .submit-btn {
+            background-color: #43a047;
+            color: #ffffff;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 42px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(67, 160, 71, 0.3);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .submit-btn:hover {
+            background-color: #388e3c;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 520px) {
+            .form-card {
+                padding: 24px 18px;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .half-width {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="header-title">Employee Complaint Form</h1>
+
+    <div class="form-card">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/submit" method="POST">
+            <!-- Employee Name -->
+            <div class="form-group">
+                <label class="form-label">Employee Name</label>
+                <div class="input-row">
+                    <div>
+                        <div class="input-with-icon">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <input type="text" name="first_name" class="form-input" required autocomplete="given-name">
+                        </div>
+                        <span class="helper-text">First Name</span>
+                    </div>
+                    <div>
+                        <input type="text" name="last_name" class="form-input" required autocomplete="family-name">
+                        <span class="helper-text">Last Name</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee Id Number -->
+            <div class="form-group">
+                <label class="form-label">Employee Id Number</label>
+                <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                        <line x1="7" y1="8" x2="11" y2="8"></line>
+                        <line x1="7" y1="12" x2="9" y2="12"></line>
+                        <line x1="15" y1="8" x2="17" y2="8"></line>
+                        <line x1="15" y1="12" x2="17" y2="12"></line>
+                    </svg>
+                    <input type="text" name="employee_id" class="form-input" required>
+                </div>
+            </div>
+
+            <!-- Department -->
+            <div class="form-group">
+                <label class="form-label">Department</label>
+                <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                        <line x1="9" y1="22" x2="9" y2="2"></line>
+                        <line x1="15" y1="6" x2="17" y2="6"></line>
+                        <line x1="15" y1="10" x2="17" y2="10"></line>
+                        <line x1="15" y1="14" x2="17" y2="14"></line>
+                        <line x1="15" y1="18" x2="17" y2="18"></line>
+                    </svg>
+                    <input type="text" name="department" class="form-input" required>
+                </div>
+            </div>
+
+            <!-- Position -->
+            <div class="form-group">
+                <label class="form-label">Position</label>
+                <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    <input type="text" name="position" class="form-input" required>
+                </div>
+            </div>
+
+            <!-- Date of Incident -->
+            <div class="form-group">
+                <label class="form-label">Date of Incident</label>
+                <div class="half-width">
+                    <div class="input-with-icon">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <input type="date" name="incident_date" class="form-input" required>
+                    </div>
+                    <span class="helper-text">dd-MMM-yyyy</span>
+                </div>
+            </div>
+
+            <!-- Nature of Complaint -->
+            <div class="form-group">
+                <label class="form-label">Nature of Complaint</label>
+                <div class="radio-options">
+                    <label class="radio-card">
+                        <input type="radio" name="nature_of_complaint" value="Discrimination" required>
+                        <span class="radio-label">Discrimination</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="nature_of_complaint" value="Conflict with Co-worker">
+                        <span class="radio-label">Conflict with Co-worker</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="nature_of_complaint" value="Workplace Safety Concern">
+                        <span class="radio-label">Workplace Safety Concern</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="nature_of_complaint" value="Harassment">
+                        <span class="radio-label">Harassment</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="nature_of_complaint" value="Other">
+                        <span class="radio-label">Other</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Description of Incident -->
+            <div class="form-group">
+                <label class="form-label">Description of Incident</label>
+                <textarea name="incident_description" class="form-textarea" placeholder="" required></textarea>
+            </div>
+
+            <!-- Acknowledgement -->
+            <div class="acknowledgement-box">
+                <input type="checkbox" id="acknowledgement" name="acknowledgement" value="yes" required>
+                <label for="acknowledgement">
+                    I acknowledge that the information provided in this complaint form is true and accurate to the best of my knowledge.
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-container">
+                <button type="submit" class="submit-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

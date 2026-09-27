@@ -8,55 +8,62 @@ app.secret_key = os.environ.get('SECRET_KEY', 'employee-complaint-secret-key')
 # MySQL Configuration from environment variables
 MYSQL_HOST = os.environ.get('MYSQL_HOST', 'localhost')
 MYSQL_USER = os.environ.get('MYSQL_USER', 'root')
-MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', '')
+MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', 'admin')
 MYSQL_DB = os.environ.get('MYSQL_DB', 'employee_db')
 MYSQL_PORT = int(os.environ.get('MYSQL_PORT', 3306))
 
 def get_db_connection():
-    try:
-        return pymysql.connect(
-            host=MYSQL_HOST,
-            user=MYSQL_USER,
-            password=MYSQL_PASSWORD,
-            database=MYSQL_DB,
-            port=MYSQL_PORT,
-            cursorclass=pymysql.cursors.DictCursor,
-            autocommit=True
-        )
-    except pymysql.err.OperationalError as e:
-        if e.args[0] == 1045 and MYSQL_USER == 'root' and MYSQL_PASSWORD != '':
+    passwords_to_try = [MYSQL_PASSWORD]
+    for alt in ['admin', '']:
+        if alt not in passwords_to_try:
+            passwords_to_try.append(alt)
+
+    last_err = None
+    for pwd in passwords_to_try:
+        try:
             return pymysql.connect(
                 host=MYSQL_HOST,
                 user=MYSQL_USER,
-                password='',
+                password=pwd,
                 database=MYSQL_DB,
                 port=MYSQL_PORT,
                 cursorclass=pymysql.cursors.DictCursor,
                 autocommit=True
             )
-        raise e
+        except pymysql.err.OperationalError as e:
+            if e.args[0] == 1045 and MYSQL_USER == 'root':
+                last_err = e
+                continue
+            raise e
+    if last_err:
+        raise last_err
 
 def init_db():
     try:
-        try:
-            conn = pymysql.connect(
-                host=MYSQL_HOST,
-                user=MYSQL_USER,
-                password=MYSQL_PASSWORD,
-                port=MYSQL_PORT,
-                autocommit=True
-            )
-        except pymysql.err.OperationalError as e:
-            if e.args[0] == 1045 and MYSQL_USER == 'root' and MYSQL_PASSWORD != '':
+        passwords_to_try = [MYSQL_PASSWORD]
+        for alt in ['admin', '']:
+            if alt not in passwords_to_try:
+                passwords_to_try.append(alt)
+
+        conn = None
+        for pwd in passwords_to_try:
+            try:
                 conn = pymysql.connect(
                     host=MYSQL_HOST,
                     user=MYSQL_USER,
-                    password='',
+                    password=pwd,
                     port=MYSQL_PORT,
                     autocommit=True
                 )
-            else:
+                break
+            except pymysql.err.OperationalError as e:
+                if e.args[0] == 1045 and MYSQL_USER == 'root':
+                    continue
                 raise e
+
+        if conn is None:
+            return
+
         with conn.cursor() as cur:
             cur.execute(f"CREATE DATABASE IF NOT EXISTS `{MYSQL_DB}`")
         conn.close()

@@ -9,7 +9,7 @@ on:
 jobs:
   build-test-and-deploy:
     name: Build, Test & Deploy
-    runs-on: [ self-hosted, bash1 ]
+    runs-on: [ self-hosted, Linux, X64 ]
 
     steps:
       - name: 1. Checkout Code

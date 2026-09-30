@@ -40,7 +40,7 @@ jobs:
       - name: 6. Docker container via Docker compose
         run: |
           docker compose down
-          docker compose -d --build
+          docker compose up -d --build
       - name: 7. verify Active containers
         run: |
          docker compose ps

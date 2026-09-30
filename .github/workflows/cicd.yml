@@ -2,9 +2,9 @@ name: CI/CD Pipeline - Employee Complaint App
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "tushar" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" , "tushar" ]
 jobs:
   build-test-and-deploy:
     name: Build, Test,push,Deploy

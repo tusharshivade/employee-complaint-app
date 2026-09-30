@@ -8,11 +8,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: employee_db
-
+  #Enter in your  root directory
     volumes:
       - mysql_data:/var/lib/mysql
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
-
+ 
     networks:
       - twotier-network
 

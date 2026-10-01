@@ -38,21 +38,4 @@ python app.py
 
 ---
 
-## ⚙️ Environment Variables
-
-| Variable | Default | Description |
-| :--- | :--- | :--- |
-| `MYSQL_HOST` | `localhost` (`db` in Docker) | MySQL host |
-| `MYSQL_PORT` | `3306` | MySQL port |
-| `MYSQL_USER` | `root` | Database username |
-| `MYSQL_PASSWORD` | `admin` | Database password |
-| `MYSQL_DB` | `employee_db` | Database name |
-
----
-
-## 🔍 View Submitted Complaints
-
-View stored records directly from the database container:
-```bash
-docker exec -it mysql-db mysql -u root -padmin employee_db -e "SELECT * FROM complaints;"
 ```

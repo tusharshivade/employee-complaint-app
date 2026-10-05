@@ -1,44 +1,26 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mysql
-  namespace: employee-app
+containers:
+  - name: mysql
+    image: mysql:5.7
 
-spec:
-  replicas: 1
+    ports:
+      - containerPort: 3306
 
-  selector:
-    matchLabels:
-      app: mysql
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysql-secret
+            key: MYSQL_ROOT_PASSWORD
 
-  template:
-    metadata:
-      labels:
-        app: mysql
+      - name: MYSQL_DATABASE
+        value: employee_db
 
-    spec:
-      containers:
-        - name: mysql
-          image: mysql:5.7
+    resources:
+      requests:
+        memory: "256Mi"
+      limits:
+        memory: "512Mi"
 
-          ports:
-            - containerPort: 3306
-
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_ROOT_PASSWORD
-
-            - name: MYSQL_DATABASE
-              value: employee_db
-
-          volumeMounts:
-            - name: mysql-storage
-              mountPath: /var/lib/mysql
-
-      volumes:
-        - name: mysql-storage
-          persistentVolumeClaim:
-            claimName: mysql-pvc
+    volumeMounts:
+      - name: mysql-storage
+        mountPath: /var/lib/mysql

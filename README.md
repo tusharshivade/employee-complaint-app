@@ -56,3 +56,41 @@ View stored records directly from the database container:
 ```bash
 docker exec -it mysql-db mysql -u root -padmin employee_db -e "SELECT * FROM complaints;"
 ```
+
+
+
+# Kubernetes Deployment — Employee Complaint Management App
+
+This directory contains the Kubernetes manifests required to deploy the
+Employee Complaint Management App on a Kubernetes cluster.
+
+The application consists of:
+
+- Flask application
+- MySQL database
+- Persistent storage
+- Kubernetes Services
+- Kubernetes Secrets
+- Kubernetes Deployments
+
+This project is currently designed for learning and local Kubernetes
+deployment using **kind**.
+
+---
+
+## 📁 Kubernetes Directory Structure
+
+```text
+k8s/
+│
+├── README.md
+│
+├── namespace.yml
+│
+├── mysql-secret.yml
+├── mysql-pvc.yml
+├── mysql-deployment.yml
+├── mysql-service.yml
+│
+├── employee-deployment.yml
+└── employee-service.yml

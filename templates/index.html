@@ -3,21 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Complaint Form</title>
+    <title>Employee Complaint & Incident Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #10b981;
-            --primary-hover: #059669;
-            --primary-light: #ecfdf5;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
+            --brand-primary: #4f46e5;
+            --brand-primary-hover: #4338ca;
+            --brand-secondary: #06b6d4;
+            --brand-gradient: linear-gradient(135deg, #4f46e5 0%, #3b82f6 50%, #06b6d4 100%);
+            --accent-glow: rgba(79, 70, 229, 0.25);
+            --bg-base: #f8fafc;
+            --surface-card: #ffffff;
+            --surface-subtle: #f1f5f9;
+            --border-subtle: #e2e8f0;
             --border-hover: #cbd5e1;
-            --bg-page: #f0fdf4;
-            --card-bg: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            --transition-smooth: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -27,189 +39,298 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #e8f5e9 0%, #f4fbf7 100%);
-            color: var(--text-main);
-            padding: 40px 16px;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.09) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 45%),
+                radial-gradient(at 50% 100%, rgba(79, 70, 229, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-body);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 40px 18px 60px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .header-section {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .header-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #064e3b;
-            letter-spacing: -0.5px;
-        }
-
-        .header-subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 6px;
-        }
-
-        .form-card {
-            background-color: var(--card-bg);
+        /* Top Bar Branding */
+        .portal-header {
             width: 100%;
-            max-width: 640px;
-            border-radius: 16px;
-            padding: 40px 36px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            max-width: 760px;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: fadeInDown 0.6s ease;
         }
 
+        .portal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(79, 70, 229, 0.08);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            color: var(--brand-primary);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            margin-bottom: 14px;
+        }
+
+        .portal-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .portal-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-heading);
+            letter-spacing: -0.8px;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        .portal-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            max-width: 580px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Form Card */
+        .form-card {
+            width: 100%;
+            max-width: 760px;
+            background: var(--surface-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: var(--shadow-card);
+            padding: 44px 40px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.7s ease;
+        }
+
+        .form-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--brand-gradient);
+        }
+
+        /* Flash Message Alerts */
         .alert {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 14px 18px;
-            border-radius: 10px;
-            margin-bottom: 24px;
+            border-radius: var(--radius-md);
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
+            margin-bottom: 28px;
+            animation: fadeIn 0.4s ease;
         }
 
         .alert-success {
             background-color: #ecfdf5;
-            color: #047857;
+            color: #065f46;
             border: 1px solid #a7f3d0;
         }
 
         .alert-error {
             background-color: #fef2f2;
-            color: #b91c1c;
+            color: #991b1b;
             border: 1px solid #fecaca;
         }
 
+        .alert svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Form Sections */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 28px 0 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .section-header:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-number {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--brand-gradient);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.3px;
+        }
+
+        /* Form Layout Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .grid-full {
+            grid-column: 1 / -1;
+        }
+
         .form-group {
-            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
         }
 
         .form-label {
-            display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 8px;
+            color: var(--text-heading);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .helper-text {
-            display: block;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 6px;
+        .label-required {
+            color: var(--error-color);
+            margin-left: 2px;
         }
 
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .input-with-icon {
+        /* Input Controls */
+        .input-wrapper {
             position: relative;
+            display: flex;
+            align-items: center;
         }
 
-        .input-with-icon .input-icon {
+        .input-icon {
             position: absolute;
             left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
             width: 18px;
             height: 18px;
-            color: #94a3b8;
+            color: var(--text-muted);
             pointer-events: none;
-            transition: color 0.2s;
+            transition: var(--transition-smooth);
         }
 
-        .form-input {
+        .form-control {
             width: 100%;
-            height: 44px;
-            padding: 8px 14px;
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            color: var(--text-main);
-            background-color: #ffffff;
-            transition: all 0.2s ease;
-        }
-
-        .input-with-icon .form-input {
+            height: 46px;
+            padding: 10px 14px;
             padding-left: 42px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-heading);
+            background: #ffffff;
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: var(--transition-smooth);
         }
 
-        .form-input:hover {
+        .form-control.no-icon {
+            padding-left: 14px;
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-control:hover {
             border-color: var(--border-hover);
         }
 
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+        .form-control:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
-        .form-input:focus + .input-icon,
-        .input-with-icon:focus-within .input-icon {
-            color: var(--primary);
+        .input-wrapper:focus-within .input-icon {
+            color: var(--brand-primary);
+            transform: scale(1.05);
         }
 
-        .half-width {
-            max-width: 280px;
-        }
-
-        .radio-options {
+        /* Nature of Complaint Selector Cards */
+        .complaint-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
 
-        .radio-card {
+        .complaint-card {
+            position: relative;
             display: flex;
             align-items: center;
-            padding: 12px 16px;
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
-            background-color: #ffffff;
+            gap: 12px;
+            padding: 13px 16px;
+            background: #ffffff;
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition-smooth);
+            user-select: none;
         }
 
-        .radio-card:hover {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
+        .complaint-card:hover {
+            border-color: #cbd5e1;
+            background-color: #f8fafc;
+            transform: translateY(-1px);
         }
 
-        .radio-card:has(input[type="radio"]:checked) {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
+        .complaint-card:has(input[type="radio"]:checked) {
+            border-color: var(--brand-primary);
+            background: rgba(79, 70, 229, 0.04);
+            box-shadow: 0 0 0 1px var(--brand-primary);
         }
 
-        .radio-card input[type="radio"] {
+        .complaint-card input[type="radio"] {
             appearance: none;
             -webkit-appearance: none;
             width: 18px;
             height: 18px;
             border: 2px solid #cbd5e1;
             border-radius: 50%;
-            outline: none;
             cursor: pointer;
-            margin-right: 12px;
+            outline: none;
+            transition: var(--transition-smooth);
             position: relative;
             flex-shrink: 0;
-            transition: all 0.2s;
         }
 
-        .radio-card input[type="radio"]:checked {
-            border-color: var(--primary);
-            background-color: var(--primary);
+        .complaint-card input[type="radio"]:checked {
+            border-color: var(--brand-primary);
+            background-color: var(--brand-primary);
         }
 
-        .radio-card input[type="radio"]:checked::after {
+        .complaint-card input[type="radio"]:checked::after {
             content: "";
             position: absolute;
             top: 50%;
@@ -217,267 +338,532 @@
             transform: translate(-50%, -50%);
             width: 6px;
             height: 6px;
-            background-color: #ffffff;
+            background: #ffffff;
             border-radius: 50%;
         }
 
-        .radio-card .radio-label {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-main);
-            user-select: none;
+        .card-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            transition: var(--transition-smooth);
         }
 
+        .complaint-card:has(input[type="radio"]:checked) .card-icon {
+            color: var(--brand-primary);
+        }
+
+        .card-label {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-heading);
+            line-height: 1.3;
+        }
+
+        /* Description Area */
         .form-textarea {
             width: 100%;
-            min-height: 120px;
-            padding: 12px 14px;
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
+            min-height: 130px;
+            padding: 14px 16px;
             font-size: 14px;
             font-family: inherit;
-            color: var(--text-main);
+            color: var(--text-heading);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            outline: none;
             resize: vertical;
-            transition: all 0.2s ease;
+            transition: var(--transition-smooth);
+            line-height: 1.5;
         }
 
-        .textarea-footer {
+        .form-textarea:hover {
+            border-color: var(--border-hover);
+        }
+
+        .form-textarea:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+
+        .textarea-meta {
             display: flex;
-            justify-content: flex-end;
-            margin-top: 4px;
-        }
-
-        .char-count {
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
             font-size: 12px;
             color: var(--text-muted);
         }
 
-        .acknowledgement-box {
+        .char-counter {
+            font-weight: 600;
+        }
+
+        /* Declaration & Acknowledgement Card */
+        .declaration-card {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
+            gap: 14px;
+            background: #f8fafc;
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
             margin: 28px 0 32px;
-            padding: 14px 16px;
-            background-color: #f8fafc;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
         }
 
-        .acknowledgement-box input[type="checkbox"] {
-            margin-top: 2px;
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
+        .declaration-card:hover {
+            border-color: #cbd5e1;
+        }
+
+        .declaration-card input[type="checkbox"] {
+            margin-top: 3px;
+            width: 19px;
+            height: 19px;
+            accent-color: var(--brand-primary);
             cursor: pointer;
             flex-shrink: 0;
+            border-radius: 4px;
         }
 
-        .acknowledgement-box label {
+        .declaration-text {
             font-size: 13px;
-            line-height: 1.5;
-            color: #334155;
+            line-height: 1.55;
+            color: var(--text-body);
             cursor: pointer;
         }
 
-        .submit-container {
-            text-align: center;
+        .declaration-text strong {
+            color: var(--text-heading);
         }
 
-        .submit-btn {
-            width: 100%;
-            background-color: var(--primary);
+        /* Submit Action Button */
+        .action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .btn-submit {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--brand-gradient);
             color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            border: none;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.35);
+            transition: var(--transition-smooth);
         }
 
-        .submit-btn:hover {
-            background-color: var(--primary-hover);
-            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
-            transform: translateY(-1px);
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -5px rgba(79, 70, 229, 0.45);
         }
 
-        .submit-btn:active {
+        .btn-submit:active {
             transform: translateY(0);
         }
 
-        @media (max-width: 520px) {
+        .btn-submit svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-submit:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* Trust Footer */
+        .trust-footer {
+            margin-top: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            color: var(--text-muted);
+            font-size: 12px;
+            animation: fadeIn 0.9s ease;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trust-item svg {
+            width: 14px;
+            height: 14px;
+            color: var(--brand-primary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 640px) {
+            body {
+                padding: 24px 12px 40px;
+            }
+
             .form-card {
-                padding: 24px 20px;
+                padding: 28px 20px;
+                border-radius: var(--radius-md);
             }
 
-            .input-row {
+            .portal-title {
+                font-size: 25px;
+            }
+
+            .form-grid {
                 grid-template-columns: 1fr;
-                gap: 12px;
+                gap: 14px;
             }
 
-            .half-width {
-                max-width: 100%;
+            .complaint-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-footer {
+                flex-direction: column;
+                gap: 8px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header-section">
-        <h1 class="header-title">Employee Complaint Form</h1>
-        <p class="header-subtitle">Please fill in the details below to submit complaint confidentially.</p>
-    </div>
 
-    <div class="form-card">
+    <!-- Header Section -->
+    <header class="portal-header">
+        <div class="portal-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Confidential & Secure Reporting
+        </div>
+        <h1 class="portal-title">Employee Incident & Complaint Form</h1>
+        <p class="portal-subtitle">
+            Our company is dedicated to a safe, transparent, and fair workplace. Submit your concern directly to HR and Ethics.
+        </p>
+    </header>
+
+    <!-- Main Card -->
+    <main class="form-card">
+
+        <!-- Flash Notifications -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% if category == 'success' %}
+                        <div class="alert alert-success" role="alert">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-error" role="alert">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
         {% endwith %}
 
-        <form action="/submit" method="POST">
-            <!-- Employee Name -->
-            <div class="form-group">
-                <label class="form-label">Employee Name</label>
-                <div class="input-row">
-                    <div>
-                        <div class="input-with-icon">
-                            <input type="text" name="first_name" class="form-input" placeholder="John" required autocomplete="given-name">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </div>
-                        <span class="helper-text">First Name</span>
+        <form action="/submit" method="POST" id="complaintForm">
+
+            <!-- Section 1: Employee Information -->
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2 class="section-title">Employee Identification</h2>
+            </div>
+
+            <div class="form-grid">
+                <!-- First Name -->
+                <div class="form-group">
+                    <label class="form-label" for="first_name">
+                        First Name <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="text" id="first_name" name="first_name" class="form-control" placeholder="e.g. Sarah" required autocomplete="given-name">
                     </div>
-                    <div>
-                        <input type="text" name="last_name" class="form-input" placeholder="Doe" required autocomplete="family-name">
-                        <span class="helper-text">Last Name</span>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label class="form-label" for="last_name">
+                        Last Name <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="text" id="last_name" name="last_name" class="form-control" placeholder="e.g. Jenkins" required autocomplete="family-name">
+                    </div>
+                </div>
+
+                <!-- Employee ID Number -->
+                <div class="form-group">
+                    <label class="form-label" for="employee_id">
+                        Employee ID <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                            <line x1="7" y1="8" x2="11" y2="8"></line>
+                            <line x1="7" y1="12" x2="9" y2="12"></line>
+                            <line x1="15" y1="8" x2="17" y2="8"></line>
+                            <line x1="15" y1="12" x2="17" y2="12"></line>
+                        </svg>
+                        <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="EMP-2048" required>
+                    </div>
+                </div>
+
+                <!-- Department -->
+                <div class="form-group">
+                    <label class="form-label" for="department">
+                        Department <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                            <line x1="9" y1="22" x2="9" y2="2"></line>
+                            <line x1="15" y1="6" x2="17" y2="6"></line>
+                            <line x1="15" y1="10" x2="17" y2="10"></line>
+                            <line x1="15" y1="14" x2="17" y2="14"></line>
+                        </svg>
+                        <input type="text" id="department" name="department" class="form-control" placeholder="e.g. Operations & Tech" required>
+                    </div>
+                </div>
+
+                <!-- Position / Title -->
+                <div class="form-group grid-full">
+                    <label class="form-label" for="position">
+                        Position / Job Title <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        <input type="text" id="position" name="position" class="form-control" placeholder="e.g. Software Engineer" required>
                     </div>
                 </div>
             </div>
 
-            <!-- Employee Id Number -->
-            <div class="form-group">
-                <label class="form-label">Employee ID Number</label>
-                <div class="input-with-icon">
-                    <input type="text" name="employee_id" class="form-input" placeholder="e.g. EMP-1042" required>
-                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-                        <line x1="7" y1="8" x2="11" y2="8"></line>
-                        <line x1="7" y1="12" x2="9" y2="12"></line>
-                        <line x1="15" y1="8" x2="17" y2="8"></line>
-                        <line x1="15" y1="12" x2="17" y2="12"></line>
-                    </svg>
-                </div>
+            <!-- Section 2: Incident Overview -->
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2 class="section-title">Incident Details</h2>
             </div>
 
-            <!-- Department -->
-            <div class="form-group">
-                <label class="form-label">Department</label>
-                <div class="input-with-icon">
-                    <input type="text" name="department" class="form-input" placeholder="e.g. Human Resources" required>
-                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="4" y="2" width="16" height="20" rx="2"></rect>
-                        <line x1="9" y1="22" x2="9" y2="2"></line>
-                        <line x1="15" y1="6" x2="17" y2="6"></line>
-                        <line x1="15" y1="10" x2="17" y2="10"></line>
-                        <line x1="15" y1="14" x2="17" y2="14"></line>
-                        <line x1="15" y1="18" x2="17" y2="18"></line>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Position -->
-            <div class="form-group">
-                <label class="form-label">Position / Job Title</label>
-                <div class="input-with-icon">
-                    <input type="text" name="position" class="form-input" placeholder="e.g. Senior Specialist" required>
-                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Date of Incident -->
-            <div class="form-group">
-                <label class="form-label">Date of Incident</label>
-                <div class="half-width">
-                    <div class="input-with-icon">
-                        <input type="date" name="incident_date" class="form-input" required>
+            <div class="form-grid">
+                <!-- Date of Incident -->
+                <div class="form-group grid-full">
+                    <label class="form-label" for="incident_date">
+                        Date of Incident <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
                         <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                             <line x1="16" y1="2" x2="16" y2="6"></line>
                             <line x1="8" y1="2" x2="8" y2="6"></line>
                             <line x1="3" y1="10" x2="21" y2="10"></line>
                         </svg>
+                        <input type="date" id="incident_date" name="incident_date" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- Nature of Complaint Cards -->
+                <div class="form-group grid-full">
+                    <label class="form-label">
+                        Nature of Complaint <span class="label-required">*</span>
+                    </label>
+                    <div class="complaint-grid">
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Discrimination" required>
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M4.93 4.93l14.14 14.14"></path>
+                            </svg>
+                            <span class="card-label">Discrimination</span>
+                        </label>
+
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Conflict with Co-worker">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            <span class="card-label">Conflict with Co-worker</span>
+                        </label>
+
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Workplace Safety Concern">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span class="card-label">Workplace Safety</span>
+                        </label>
+
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Harassment">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            <span class="card-label">Harassment</span>
+                        </label>
+
+                        <label class="complaint-card" style="grid-column: 1 / -1;">
+                            <input type="radio" name="nature_of_complaint" value="Other">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                            <span class="card-label">Other Policy Violation / Ethics Concern</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Description Textarea -->
+                <div class="form-group grid-full">
+                    <label class="form-label" for="description">
+                        Incident Description & Statement <span class="label-required">*</span>
+                    </label>
+                    <textarea 
+                        id="description" 
+                        name="incident_description" 
+                        class="form-textarea" 
+                        placeholder="Please provide specific details: dates, individuals involved, location, and factual description of what occurred..." 
+                        maxlength="1000" 
+                        required></textarea>
+                    <div class="textarea-meta">
+                        <span>Be as detailed and factual as possible.</span>
+                        <span><span id="char-counter" class="char-counter">0</span> / 1000 characters</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Nature of Complaint -->
-            <div class="form-group">
-                <label class="form-label">Nature of Complaint</label>
-                <div class="radio-options">
-                    <label class="radio-card">
-                        <input type="radio" name="nature_of_complaint" value="Discrimination" required>
-                        <span class="radio-label">Discrimination</span>
-                    </label>
-                    <label class="radio-card">
-                        <input type="radio" name="nature_of_complaint" value="Conflict with Co-worker">
-                        <span class="radio-label">Conflict with Co-worker</span>
-                    </label>
-                    <label class="radio-card">
-                        <input type="radio" name="nature_of_complaint" value="Workplace Safety Concern">
-                        <span class="radio-label">Workplace Safety Concern</span>
-                    </label>
-                    <label class="radio-card">
-                        <input type="radio" name="nature_of_complaint" value="Harassment">
-                        <span class="radio-label">Harassment</span>
-                    </label>
-                    <label class="radio-card">
-                        <input type="radio" name="nature_of_complaint" value="Other">
-                        <span class="radio-label">Other</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Description of Incident -->
-            <div class="form-group">
-                <label class="form-label">Enter Your Complaint In Details</label>
-                <textarea id="description" name="incident_description" class="form-textarea" placeholder="Please describe what happened in detail..." maxlength="1000" required></textarea>
-                <div class="textarea-footer">
-                    <span class="char-count"><span id="char-counter">0</span>/500 characters</span>
-                </div>
-            </div>
-
-            <!-- Acknowledgement -->
-            <div class="acknowledgement-box">
+            <!-- Declaration -->
+            <div class="declaration-card">
                 <input type="checkbox" id="acknowledgement" name="acknowledgement" value="yes" required>
-                <label for="acknowledgement">
-                    I acknowledge that the information provided in this complaint form is true and accurate to the best of my knowledge.
+                <label for="acknowledgement" class="declaration-text">
+                    <strong>Official Declaration:</strong> I acknowledge and certify that the facts provided in this report are truthful, accurate, and submitted in good faith. I understand this report will be reviewed confidentially by Human Resources.
                 </label>
             </div>
 
-            <!-- Submit Button -->
-            <div class="submit-container">
-                <button type="submit" class="submit-btn">Submit Complaint</button>
+            <!-- Submit CTA -->
+            <div class="action-row">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span>Submit Official Complaint</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
             </div>
         </form>
-    </div>
+    </main>
+
+    <!-- Trust Footer -->
+    <footer class="trust-footer">
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            256-Bit SSL Encrypted
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Zero Retaliation Policy
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+            HR Response within 48 Hours
+        </div>
+    </footer>
 
     <script>
-        // Feature: Dynamic Character Counter for Description Textarea
-        const textarea = document.getElementById('description');
-        const counter = document.getElementById('char-counter');
+        // Real-time character counter
+        const descriptionInput = document.getElementById('description');
+        const charCounter = document.getElementById('char-counter');
 
-        textarea.addEventListener('input', () => {
-            counter.textContent = textarea.value.length;
-        });
+        if (descriptionInput && charCounter) {
+            descriptionInput.addEventListener('input', () => {
+                const len = descriptionInput.value.length;
+                charCounter.textContent = len;
+                if (len > 900) {
+                    charCounter.style.color = '#ef4444';
+                } else {
+                    charCounter.style.color = 'inherit';
+                }
+            });
+        }
+
+        // Set max date for incident to today
+        const incidentDateInput = document.getElementById('incident_date');
+        if (incidentDateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            incidentDateInput.setAttribute('max', today);
+        }
+
+        // Prevent accidental multiple submissions
+        const form = document.getElementById('complaintForm');
+        const submitBtn = document.getElementById('submitBtn');
+        if (form && submitBtn) {
+            form.addEventListener('submit', () => {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.75';
+                submitBtn.querySelector('span').textContent = 'Submitting...';
+            });
+        }
     </script>
 </body>
 </html>

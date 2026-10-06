@@ -94,3 +94,6 @@ k8s/
 │
 ├── employee-deployment.yml
 └── employee-service.yml
+```
+
+For complete step-by-step instructions on deploying the application to your local **kind** cluster, see [`k8s/README.md`](k8s/README.md).

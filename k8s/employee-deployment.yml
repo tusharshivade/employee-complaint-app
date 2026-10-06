@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: employee-app
   namespace: employee-app
+  labels:
+    app: employee-app
 
 spec:
   replicas: 2
@@ -20,8 +22,8 @@ spec:
     spec:
       containers:
         - name: employee-app
-
-          image: YOUR_DOCKERHUB_USERNAME/employee-complaint-app:latest
+          image: shivadetushar/employee-comlaint-app:latest
+          imagePullPolicy: IfNotPresent
 
           ports:
             - containerPort: 5000
@@ -50,6 +52,22 @@ spec:
 
           resources:
             requests:
+              cpu: 100m
               memory: "128Mi"
             limits:
+              cpu: 500m
               memory: "256Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20

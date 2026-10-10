@@ -4,43 +4,70 @@ on:
   push:
     branches: [ "main", "tushar" ]
   pull_request:
-    branches: [ "main" , "tushar" ]
+    branches: [ "main", "tushar" ]
+
 jobs:
   build-test-and-deploy:
-    name: Build, Test,push,Deploy
+    name: Build, Test, Push & Deploy to Kubernetes
     runs-on: [ self-hosted, Linux, X64 ]
 
     steps:
       - name: 1. Checkout Code
         uses: actions/checkout@v4
 
-      - name: 2. Install Dependencies
+      - name: 2. Set up Python & Install Dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: 3. Check Code Syntax
+      - name: 3. Check Python Code Syntax
         run: |
-          python -m py_compile app.py
+          python3 -m py_compile app.py
 
-      - name: 4. Log in to docker hub
+      - name: 4. Validate Kubernetes Manifests
+        run: |
+          echo "Validating Kubernetes manifests..."
+          python3 -c "import glob, yaml; [list(yaml.safe_load_all(open(f))) for f in glob.glob('k8s/*.yml')]; print('All YAML manifests are valid!')"
+
+      - name: 5. Log in to Docker Hub
+        if: github.event_name == 'push'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: 5. Build and push Docker image to Docker hub
+      - name: 6. Build and Push Docker Image
+        if: github.event_name == 'push'
         env:
           IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/employee-comlaint-app
         run: |
-          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha}} .
+          echo "Building image $IMAGE_NAME for commit ${{ github.sha }}..."
+          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} .
+          echo "Pushing images to Docker Hub..."
           docker push $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ github.sha }}
-        
-      - name: 6. Docker container via Docker compose
+
+      - name: 7. Deploy to Kubernetes (kind)
+        if: github.event_name == 'push'
+        env:
+          IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/employee-comlaint-app
         run: |
-          docker compose down
-          docker compose up -d --build
-      - name: 7. verify Active containers
+          echo "Deploying to Kubernetes namespace employee-app..."
+          # Pre-load image into kind if cluster is present locally
+          kind load docker-image $IMAGE_NAME:latest 2>/dev/null || true
+          kind load docker-image $IMAGE_NAME:${{ github.sha }} 2>/dev/null || true
+
+          # Apply manifests
+          kubectl apply -f k8s/namespace.yml
+          kubectl apply -f k8s/
+
+          # Trigger rolling update with current commit SHA tag
+          kubectl set image deployment/employee-app employee-app=$IMAGE_NAME:${{ github.sha }} -n employee-app
+
+          # Wait for rollout completion
+          kubectl rollout status deployment/employee-app -n employee-app --timeout=120s
+
+      - name: 8. Verify Active Kubernetes Resources
+        if: github.event_name == 'push'
         run: |
-         docker compose ps
+          kubectl get all -n employee-app

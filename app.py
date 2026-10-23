@@ -91,6 +91,9 @@ def init_db():
         print(f"[Warning] Could not initialize database on startup: {e}")
 
 @app.route('/')
+@app.route('/index.html')
+@app.route('/complaint')
+@app.route('/complaints')
 def index():
     return render_template('index.html')
 

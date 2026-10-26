@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 import pymysql
 
 app = Flask(__name__)
@@ -96,6 +96,18 @@ def init_db():
 @app.route('/complaints')
 def index():
     return render_template('index.html')
+
+@app.route('/style.css')
+@app.route('/complaint/style.css')
+@app.route('/complaints/style.css')
+def serve_css():
+    return send_from_directory(os.path.join(app.root_path, 'templates'), 'style.css')
+
+@app.route('/script.js')
+@app.route('/complaint/script.js')
+@app.route('/complaints/script.js')
+def serve_js():
+    return send_from_directory(os.path.join(app.root_path, 'templates'), 'script.js')
 
 @app.route('/submit', methods=['POST'])
 def submit():

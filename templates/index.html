@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Complaint & Incident Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- Header Section -->
     <header class="portal-header">
         <div class="portal-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
@@ -31,28 +36,30 @@
 
         <!-- Flash Notifications -->
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    {% if category == 'success' %}
-                        <div class="alert alert-success" role="alert">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            <span>{{ message }}</span>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-error" role="alert">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
-                            <span>{{ message }}</span>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'success' %}
+        <div class="alert alert-success" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>{{ message }}</span>
+        </div>
+        {% else %}
+        <div class="alert alert-error" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>{{ message }}</span>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
         {% endwith %}
 
         <form action="/submit" method="POST" id="complaintForm">
@@ -70,11 +77,13 @@
                         First Name <span class="label-required">*</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <input type="text" id="first_name" name="first_name" class="form-control" placeholder="e.g. Sarah" required autocomplete="given-name">
+                        <input type="text" id="first_name" name="first_name" class="form-control"
+                            placeholder="e.g. Sarah" required autocomplete="given-name">
                     </div>
                 </div>
 
@@ -84,11 +93,13 @@
                         Last Name <span class="label-required">*</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <input type="text" id="last_name" name="last_name" class="form-control" placeholder="e.g. Jenkins" required autocomplete="family-name">
+                        <input type="text" id="last_name" name="last_name" class="form-control"
+                            placeholder="e.g. Jenkins" required autocomplete="family-name">
                     </div>
                 </div>
 
@@ -98,14 +109,16 @@
                         Employee ID <span class="label-required">*</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="4" width="18" height="16" rx="2"></rect>
                             <line x1="7" y1="8" x2="11" y2="8"></line>
                             <line x1="7" y1="12" x2="9" y2="12"></line>
                             <line x1="15" y1="8" x2="17" y2="8"></line>
                             <line x1="15" y1="12" x2="17" y2="12"></line>
                         </svg>
-                        <input type="text" id="employee_id" name="employee_id" class="form-control" placeholder="EMP-2048" required>
+                        <input type="text" id="employee_id" name="employee_id" class="form-control"
+                            placeholder="EMP-2048" required>
                     </div>
                 </div>
 
@@ -115,14 +128,16 @@
                         Department <span class="label-required">*</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <rect x="4" y="2" width="16" height="20" rx="2"></rect>
                             <line x1="9" y1="22" x2="9" y2="2"></line>
                             <line x1="15" y1="6" x2="17" y2="6"></line>
                             <line x1="15" y1="10" x2="17" y2="10"></line>
                             <line x1="15" y1="14" x2="17" y2="14"></line>
                         </svg>
-                        <input type="text" id="department" name="department" class="form-control" placeholder="e.g. Operations & Tech" required>
+                        <input type="text" id="department" name="department" class="form-control"
+                            placeholder="e.g. Operations & Tech" required>
                     </div>
                 </div>
 
@@ -132,11 +147,13 @@
                         Position / Job Title <span class="label-required">*</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
                         </svg>
-                        <input type="text" id="position" name="position" class="form-control" placeholder="e.g. Software Engineer" required>
+                        <input type="text" id="position" name="position" class="form-control"
+                            placeholder="e.g. Software Engineer" required>
                     </div>
                 </div>
             </div>
@@ -154,7 +171,8 @@
                         Date of Incident <span class="label-required">*</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                             <line x1="16" y1="2" x2="16" y2="6"></line>
                             <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -172,7 +190,8 @@
                     <div class="complaint-grid">
                         <label class="complaint-card">
                             <input type="radio" name="nature_of_complaint" value="Discrimination" required>
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="M4.93 4.93l14.14 14.14"></path>
                             </svg>
@@ -181,7 +200,8 @@
 
                         <label class="complaint-card">
                             <input type="radio" name="nature_of_complaint" value="Conflict with Co-worker">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="9" cy="7" r="4"></circle>
                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -192,7 +212,8 @@
 
                         <label class="complaint-card">
                             <input type="radio" name="nature_of_complaint" value="Workplace Safety Concern">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             </svg>
                             <span class="card-label">Workplace Safety</span>
@@ -200,8 +221,11 @@
 
                         <label class="complaint-card">
                             <input type="radio" name="nature_of_complaint" value="Harassment">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                                </path>
                                 <line x1="12" y1="9" x2="12" y2="13"></line>
                                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
@@ -210,7 +234,8 @@
 
                         <label class="complaint-card" style="grid-column: 1 / -1;">
                             <input type="radio" name="nature_of_complaint" value="Other">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="1"></circle>
                                 <circle cx="19" cy="12" r="1"></circle>
                                 <circle cx="5" cy="12" r="1"></circle>
@@ -225,13 +250,9 @@
                     <label class="form-label" for="description">
                         Incident Description & Statement <span class="label-required">*</span>
                     </label>
-                    <textarea 
-                        id="description" 
-                        name="incident_description" 
-                        class="form-textarea" 
-                        placeholder="Please provide specific details: dates, individuals involved, location, and factual description of what occurred..." 
-                        maxlength="1000" 
-                        required></textarea>
+                    <textarea id="description" name="incident_description" class="form-textarea"
+                        placeholder="Please provide specific details: dates, individuals involved, location, and factual description of what occurred..."
+                        maxlength="1000" required></textarea>
                     <div class="textarea-meta">
                         <span>Be as detailed and factual as possible.</span>
                         <span><span id="char-counter" class="char-counter">0</span> / 1000 characters</span>
@@ -243,15 +264,18 @@
             <div class="declaration-card">
                 <input type="checkbox" id="acknowledgement" name="acknowledgement" value="yes" required>
                 <label for="acknowledgement" class="declaration-text">
-                    <strong>Official Declaration:</strong> I acknowledge and certify that the facts provided in this report are truthful, accurate, and submitted in good faith. I understand this report will be reviewed confidentially by Human Resources.
+                    <strong>Official Declaration:</strong> I acknowledge and certify that the facts provided in this
+                    report are truthful, accurate, and submitted in good faith. I understand this report will be
+                    reviewed confidentially by Human Resources.
                 </label>
             </div>
 
             <!-- Submit CTA -->
             <div class="action-row">
                 <button type="submit" class="btn-submit" id="submitBtn">
-                    <span>Submit Official Complaint</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <span>Submit your we well giva replay Official Complaint</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
@@ -263,7 +287,8 @@
     <!-- Trust Footer -->
     <footer class="trust-footer">
         <div class="trust-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
@@ -271,14 +296,16 @@
         </div>
         <span>•</span>
         <div class="trust-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
             Zero Retaliation Policy
         </div>
         <span>•</span>
         <div class="trust-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12 14 14"></polyline>
             </svg>
@@ -288,4 +315,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

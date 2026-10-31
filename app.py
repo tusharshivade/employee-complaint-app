@@ -114,7 +114,7 @@ def init_db():
                 cur.execute("""
                     INSERT INTO employees (employee_id, first_name, last_name, email, department, position, password_hash)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
-                """, ('EMP-2048', 'Sarah', 'Jenkins', 'sarah.jenkins@company.com', 'Operations & Tech', 'Software Engineer', hashed_pw))
+                """, ('EMP-2048', 'Sarah', 'Jenkins', 'sarah.jenkins@novaplus.com', 'Operations & Tech', 'Software Engineer', hashed_pw))
                 print("[Init] Demo employee Sarah Jenkins (EMP-2048) seeded successfully.")
 
         db_conn.close()

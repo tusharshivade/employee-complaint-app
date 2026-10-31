@@ -105,7 +105,7 @@ function handleLocalSignIn(e) {
             first_name: 'Sarah',
             last_name: 'Jenkins',
             employee_id: identifier.toUpperCase().startsWith('EMP-') ? identifier.toUpperCase() : 'EMP-2048',
-            email: identifier.includes('@') ? identifier : 'sarah.jenkins@company.com',
+            email: identifier.includes('@') ? identifier : 'sarah.jenkins@novaplus.com',
             department: 'Operations & Tech',
             position: 'Software Engineer'
         };
@@ -324,7 +324,7 @@ document.addEventListener('keydown', (e) => {
 
 // Mock SSO Handler
 function handleMockSSO(provider) {
-    alert(`${provider} Single Sign-On:\nIn enterprise production, your corporate Identity Provider (Azure AD / Google Workspace) will authenticate your session. For local testing, please use Employee ID EMP-2048 or create a test employee account.`);
+    alert(`${provider} Single Sign-On:\nIn enterprise production, Novaplus corporate Identity Provider (Azure AD / Google Workspace) will authenticate your session. For local testing, please use Employee ID EMP-2048 or create a test employee account.`);
 }
 
 // ========================================================

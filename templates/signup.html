@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Employee Account | WorkplacePulse</title>
+    <meta name="description" content="Register your verified employee account for confidential incident reporting.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Top App Navigation -->
+    <nav class="app-navbar">
+        <a href="index.html" class="nav-brand">
+            <div class="nav-logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <span>WorkplacePulse</span>
+        </a>
+        <div class="nav-right">
+            <a href="login.html" class="btn-nav btn-nav-primary">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                <span>Sign In</span>
+            </a>
+            <a href="index.html" class="btn-nav btn-nav-outline">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Complaint Portal</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="portal-header">
+        <div class="portal-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <line x1="20" y1="8" x2="20" y2="14"></line>
+                <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+            Employee Registration • 256-Bit SSL
+        </div>
+        <h1 class="portal-title">Create Employee Account</h1>
+        <p class="portal-subtitle">
+            Register your verified employee credentials to submit, track, and manage confidential workplace incident reports.
+        </p>
+    </header>
+
+    <!-- Main Auth Card -->
+    <main class="auth-wrapper wide">
+        <div class="auth-card">
+
+            <!-- Flash Notifications -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'success' %}
+            <div class="alert alert-success" role="alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+            {% else %}
+            <div class="alert alert-error" role="alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form action="/signup" method="POST" id="signupForm" onsubmit="handleLocalSignUp(event)">
+                <div class="form-grid">
+                    <!-- First Name -->
+                    <div class="form-group">
+                        <label class="form-label" for="signup_first_name">
+                            First Name <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <input type="text" id="signup_first_name" name="first_name" class="form-control"
+                                placeholder="e.g. Alex" required autocomplete="given-name">
+                        </div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="form-group">
+                        <label class="form-label" for="signup_last_name">
+                            Last Name <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <input type="text" id="signup_last_name" name="last_name" class="form-control"
+                                placeholder="e.g. Rivera" required autocomplete="family-name">
+                        </div>
+                    </div>
+
+                    <!-- Employee ID -->
+                    <div class="form-group">
+                        <label class="form-label" for="signup_employee_id">
+                            Employee ID <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                                <line x1="7" y1="8" x2="11" y2="8"></line>
+                                <line x1="7" y1="12" x2="9" y2="12"></line>
+                                <line x1="15" y1="8" x2="17" y2="8"></line>
+                            </svg>
+                            <input type="text" id="signup_employee_id" name="employee_id" class="form-control"
+                                placeholder="EMP-3105" required>
+                        </div>
+                        <span class="form-hint">Official ID on your badge or HR portal</span>
+                    </div>
+
+                    <!-- Work Email -->
+                    <div class="form-group">
+                        <label class="form-label" for="signup_email">
+                            Work Email <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <input type="email" id="signup_email" name="email" class="form-control"
+                                placeholder="alex.rivera@company.com" required autocomplete="email">
+                        </div>
+                    </div>
+
+                    <!-- Department -->
+                    <div class="form-group">
+                        <label class="form-label" for="signup_department">
+                            Department <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                                <line x1="9" y1="22" x2="9" y2="2"></line>
+                                <line x1="15" y1="6" x2="17" y2="6"></line>
+                                <line x1="15" y1="10" x2="17" y2="10"></line>
+                            </svg>
+                            <select id="signup_department" name="department" class="form-control" required>
+                                <option value="" disabled selected>Select Department</option>
+                                <option value="Operations & Tech">Operations & Tech</option>
+                                <option value="Engineering">Engineering & Product</option>
+                                <option value="Human Resources">Human Resources & People</option>
+                                <option value="Finance & Accounting">Finance & Accounting</option>
+                                <option value="Legal & Compliance">Legal & Compliance</option>
+                                <option value="Sales & Business Dev">Sales & Business Dev</option>
+                                <option value="Customer Support">Customer Support & Success</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Job Title -->
+                    <div class="form-group">
+                        <label class="form-label" for="signup_position">
+                            Position / Job Title <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                            <input type="text" id="signup_position" name="position" class="form-control"
+                                placeholder="e.g. Systems Engineer" required>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group grid-full">
+                        <label class="form-label" for="signup_password">
+                            Create Password <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <input type="password" id="signup_password" name="password" class="form-control"
+                                placeholder="Min. 6 characters (Letters, numbers, symbols)" required
+                                autocomplete="new-password" style="padding-right: 44px;">
+                            <button type="button" class="password-toggle-btn"
+                                onclick="togglePasswordVisibility('signup_password', this)"
+                                aria-label="Show password" title="Show password">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="7" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="pw-strength-container">
+                            <div class="pw-strength-bar">
+                                <div class="pw-strength-segment" id="pw-seg-1"></div>
+                                <div class="pw-strength-segment" id="pw-seg-2"></div>
+                                <div class="pw-strength-segment" id="pw-seg-3"></div>
+                                <div class="pw-strength-segment" id="pw-seg-4"></div>
+                            </div>
+                            <div class="pw-strength-text">
+                                <span>Strength</span>
+                                <strong id="pw-strength-label">Minimum 6 characters</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-group grid-full">
+                        <label class="form-label" for="signup_confirm_password">
+                            Confirm Password <span class="label-required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <input type="password" id="signup_confirm_password" name="confirm_password"
+                                class="form-control" placeholder="Re-enter your password" required
+                                autocomplete="new-password" style="padding-right: 44px;">
+                            <button type="button" class="password-toggle-btn"
+                                onclick="togglePasswordVisibility('signup_confirm_password', this)"
+                                aria-label="Show password" title="Show password">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="7" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="pw-match-text" class="pw-match-text"></div>
+                    </div>
+                </div>
+
+                <!-- Declaration Checkbox -->
+                <div class="declaration-card" style="margin: 16px 0 22px;">
+                    <input type="checkbox" id="signup_declaration" name="declaration" value="yes" required>
+                    <label for="signup_declaration" class="declaration-text">
+                        <strong>Corporate Compliance:</strong> I confirm that I am an authorized employee of this
+                        organization and agree to adhere to company ethics policies and truthful reporting.
+                    </label>
+                </div>
+
+                <!-- Submit CTA -->
+                <button type="submit" class="btn-submit" id="btnSignUpSubmit" style="width: 100%;">
+                    <span>Complete Employee Registration</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Switcher to Sign In -->
+            <div class="auth-return-row">
+                <p style="margin-bottom: 10px;">
+                    Already have an employee account? <a href="login.html" style="font-weight: 700;">Sign In here</a>
+                </p>
+                <a href="index.html">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Return to Incident Complaint Form</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Trust Footer -->
+    <footer class="trust-footer">
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            256-Bit SSL Encrypted
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Zero Retaliation Guarantee
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+            HR Response within 48 Hours
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

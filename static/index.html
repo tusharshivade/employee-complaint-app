@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Complaint & Incident Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-user-firstname="{{ employee.first_name if employee else '' }}" data-user-lastname="{{ employee.last_name if employee else '' }}" data-user-empid="{{ employee.employee_id if employee else '' }}" data-user-dept="{{ employee.department if employee else '' }}" data-user-position="{{ employee.position if employee else '' }}">
+
+    <!-- Top App Navigation -->
+    <nav class="app-navbar">
+        <a href="index.html" class="nav-brand">
+            <div class="nav-logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <span>WorkplacePulse</span>
+        </a>
+        <div class="nav-right">
+            <!-- Guest actions (default) -->
+            <div id="nav-guest-actions" style="display: flex; align-items: center; gap: 8px;">
+                <a href="login.html" class="btn-nav btn-nav-primary">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    <span>Sign In</span>
+                </a>
+                <a href="signup.html" class="btn-nav btn-nav-outline">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    <span>Register</span>
+                </a>
+            </div>
+
+            <!-- Logged in employee state (shown dynamically) -->
+            <div id="nav-user-actions" style="display: none; align-items: center; gap: 10px;">
+                <div class="nav-user-pill">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span id="nav-user-name">Sarah Jenkins</span>
+                    <span class="nav-user-id" id="nav-user-id">EMP-2048</span>
+                </div>
+                <button type="button" class="btn-nav btn-nav-danger" onclick="handleLogout()" title="Sign out of employee portal">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="portal-header">
+        <div class="portal-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Confidential & Secure Reporting
+        </div>
+        <h1 class="portal-title">Employee Incident & Complaint Form</h1>
+        <p class="portal-subtitle">
+            Our company is dedicated to a safe, transparent workplace. Submit your concern directly to HR and Ethics.
+        </p>
+    </header>
+
+    <!-- Main Card -->
+    <main class="form-card">
+
+        <!-- Flash Notifications -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'success' %}
+        <div class="alert alert-success" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>{{ message }}</span>
+        </div>
+        {% else %}
+        <div class="alert alert-error" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>{{ message }}</span>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Verified Employee Session Banner (Shown if authenticated) -->
+        <div id="verified-banner" class="verified-employee-banner" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="verified-badge-tag">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Verified Employee
+                </span>
+                <span>Signed in as <strong id="banner-employee-name">Sarah Jenkins</strong> (<code id="banner-employee-id">EMP-2048</code> • <span id="banner-employee-dept">Operations & Tech</span>)</span>
+            </div>
+            <button type="button" onclick="handleLogout()" style="background: none; border: none; font-size: 12.5px; color: var(--text-muted); text-decoration: underline; cursor: pointer;">Switch Account</button>
+        </div>
+
+        <form action="/submit" method="POST" id="complaintForm">
+
+            <!-- Section 1: Employee Information -->
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2 class="section-title">Employee Identification</h2>
+            </div>
+
+            <div class="form-grid">
+                <!-- First Name -->
+                <div class="form-group">
+                    <label class="form-label" for="first_name">
+                        First Name <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="text" id="first_name" name="first_name" class="form-control"
+                            placeholder="e.g. Sarah" required autocomplete="given-name">
+                    </div>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label class="form-label" for="last_name">
+                        Last Name <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="text" id="last_name" name="last_name" class="form-control"
+                            placeholder="e.g. Jenkins" required autocomplete="family-name">
+                    </div>
+                </div>
+
+                <!-- Employee ID Number -->
+                <div class="form-group">
+                    <label class="form-label" for="employee_id">
+                        Employee ID <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                            <line x1="7" y1="8" x2="11" y2="8"></line>
+                            <line x1="7" y1="12" x2="9" y2="12"></line>
+                            <line x1="15" y1="8" x2="17" y2="8"></line>
+                            <line x1="15" y1="12" x2="17" y2="12"></line>
+                        </svg>
+                        <input type="text" id="employee_id" name="employee_id" class="form-control"
+                            placeholder="EMP-2048" required>
+                    </div>
+                </div>
+
+                <!-- Department -->
+                <div class="form-group">
+                    <label class="form-label" for="department">
+                        Department <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                            <line x1="9" y1="22" x2="9" y2="2"></line>
+                            <line x1="15" y1="6" x2="17" y2="6"></line>
+                            <line x1="15" y1="10" x2="17" y2="10"></line>
+                            <line x1="15" y1="14" x2="17" y2="14"></line>
+                        </svg>
+                        <input type="text" id="department" name="department" class="form-control"
+                            placeholder="e.g. Operations & Tech" required>
+                    </div>
+                </div>
+
+                <!-- Position / Title -->
+                <div class="form-group grid-full">
+                    <label class="form-label" for="position">
+                        Position / Job Title <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        <input type="text" id="position" name="position" class="form-control"
+                            placeholder="e.g. Software Engineer" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Incident Overview -->
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2 class="section-title">Incident Details</h2>
+            </div>
+
+            <div class="form-grid">
+                <!-- Date of Incident -->
+                <div class="form-group grid-full">
+                    <label class="form-label" for="incident_date">
+                        Date of Incident <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <input type="date" id="incident_date" name="incident_date" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- Nature of Complaint Cards -->
+                <div class="form-group grid-full">
+                    <label class="form-label">
+                        Nature of Complaint <span class="label-required">*</span>
+                    </label>
+                    <div class="complaint-grid">
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Discrimination" required>
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M4.93 4.93l14.14 14.14"></path>
+                            </svg>
+                            <span class="card-label">Discrimination</span>
+                        </label>
+
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Conflict with Co-worker">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            <span class="card-label">Conflict with Co-worker</span>
+                        </label>
+
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Workplace Safety Concern">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span class="card-label">Workplace Safety</span>
+                        </label>
+
+                        <label class="complaint-card">
+                            <input type="radio" name="nature_of_complaint" value="Harassment">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                                </path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            <span class="card-label">Harassment</span>
+                        </label>
+
+                        <label class="complaint-card" style="grid-column: 1 / -1;">
+                            <input type="radio" name="nature_of_complaint" value="Other">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                            <span class="card-label">Other Policy Violation / Ethics Concern</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Description Textarea -->
+                <div class="form-group grid-full">
+                    <label class="form-label" for="description">
+                        Incident Description & Statement <span class="label-required">*</span>
+                    </label>
+                    <textarea id="description" name="incident_description" class="form-textarea"
+                        placeholder="Please provide specific details: dates, individuals involved, location, and factual description of what occurred..."
+                        maxlength="1000" required></textarea>
+                    <div class="textarea-meta">
+                        <span>Be as detailed and factual as possible.</span>
+                        <span><span id="char-counter" class="char-counter">0</span> / 1000 characters</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Declaration -->
+            <div class="declaration-card">
+                <input type="checkbox" id="acknowledgement" name="acknowledgement" value="yes" required>
+                <label for="acknowledgement" class="declaration-text">
+                    <strong>Official Declaration:</strong> I acknowledge and certify that the facts provided in this
+                    report are truthful, accurate, and submitted in good faith. I understand by Human Resources.
+                </label>
+            </div>
+
+            <!-- Submit CTA -->
+            <div class="action-row">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span>Submit Official Complaint Report</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <!-- Trust Footer -->
+    <footer class="trust-footer">
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            256-Bit SSL Encrypted
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Zero Retaliation Policy
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+            HR Response within 48 Hours
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

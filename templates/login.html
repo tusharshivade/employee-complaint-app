@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Sign In | WorkplacePulse</title>
+    <meta name="description" content="Secure, confidential employee sign in portal for workplace incident management.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Top App Navigation -->
+    <nav class="app-navbar">
+        <a href="index.html" class="nav-brand">
+            <div class="nav-logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <span>WorkplacePulse</span>
+        </a>
+        <div class="nav-right">
+            <a href="signup.html" class="btn-nav btn-nav-outline">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                <span>Create Account</span>
+            </a>
+            <a href="index.html" class="btn-nav btn-nav-primary">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Complaint Portal</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="portal-header">
+        <div class="portal-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Confidential & Secure Reporting
+        </div>
+        <h1 class="portal-title">Employee Sign In</h1>
+        <p class="portal-subtitle">
+            Enter your employee credentials to access your confidential incident dashboard and verified submissions.
+        </p>
+    </header>
+
+    <!-- Main Auth Card -->
+    <main class="auth-wrapper">
+        <div class="auth-card">
+
+            <!-- Flash Notifications -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'success' %}
+            <div class="alert alert-success" role="alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+            {% else %}
+            <div class="alert alert-error" role="alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <!-- Quick Demo Account Helper Box -->
+            <div class="demo-account-box">
+                <div class="demo-info">
+                    <div class="demo-badge-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <div class="demo-details">
+                        <strong>Quick Demo Account</strong>
+                        <span>Sarah Jenkins (ID: <code>EMP-2048</code>)</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-demo-fill" onclick="fillDemoEmployee()" title="Auto-fill test credentials">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Fill Demo</span>
+                </button>
+            </div>
+
+            <form action="/login" method="POST" id="signinForm" onsubmit="handleLocalSignIn(event)">
+                <!-- Identifier -->
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="form-label" for="login_identifier">
+                        Employee ID or Work Email <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="text" id="login_identifier" name="identifier" class="form-control"
+                            placeholder="e.g. EMP-2048 or sarah@company.com" required autocomplete="username">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label class="form-label" for="login_password">
+                        Password <span class="label-required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <input type="password" id="login_password" name="password" class="form-control"
+                            placeholder="Enter your password" required autocomplete="current-password"
+                            style="padding-right: 44px;">
+                        <button type="button" class="password-toggle-btn"
+                            onclick="togglePasswordVisibility('login_password', this)" aria-label="Show password"
+                            title="Show password">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="7" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Options: Remember Me & Forgot Password -->
+                <div class="auth-row-options">
+                    <label class="auth-checkbox-label">
+                        <input type="checkbox" name="remember" value="yes">
+                        <span>Remember this device</span>
+                    </label>
+                    <button type="button" class="auth-link" onclick="openHelpModal()">Forgot Password?</button>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit" id="btnSignInSubmit" style="width: 100%;">
+                    <span>Sign In to Portal</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </form>
+
+            <!-- SSO Divider -->
+            <div class="auth-divider">
+                <span>or continue with corporate SSO</span>
+            </div>
+
+            <!-- SSO Buttons -->
+            <div class="sso-grid">
+                <button type="button" class="btn-sso" onclick="handleMockSSO('Google Workspace')">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                        <path fill="#EA4335"
+                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                    <span>Google SSO</span>
+                </button>
+                <button type="button" class="btn-sso" onclick="handleMockSSO('Microsoft 365')">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="1" y="1" width="10" height="10" fill="#f25022" />
+                        <rect x="13" y="1" width="10" height="10" fill="#7fba00" />
+                        <rect x="1" y="13" width="10" height="10" fill="#00a4ef" />
+                        <rect x="13" y="13" width="10" height="10" fill="#ffb900" />
+                    </svg>
+                    <span>Microsoft 365</span>
+                </button>
+            </div>
+
+            <!-- Switcher to Sign Up -->
+            <div class="auth-return-row">
+                <p style="margin-bottom: 10px;">
+                    Don't have an employee account? <a href="signup.html" style="font-weight: 700;">Create Account</a>
+                </p>
+                <a href="index.html">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Return to Incident Complaint Form</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Trust Footer -->
+    <footer class="trust-footer">
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            256-Bit SSL Encrypted
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Zero Retaliation Guarantee
+        </div>
+        <span>•</span>
+        <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+            HR Response within 48 Hours
+        </div>
+    </footer>
+
+    <!-- Help & Password Recovery Modal -->
+    <div class="auth-modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <div class="auth-modal-title" id="modalTitle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Employee Account Assistance</span>
+                </div>
+                <button type="button" class="auth-modal-close" onclick="closeHelpModal()" aria-label="Close dialog">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="auth-modal-body">
+                <p>Employee credential resets are managed through the internal HR Ethics and Corporate Security directory.</p>
+                <div class="auth-modal-box">
+                    <strong>Default Testing Account:</strong>
+                    Employee ID: <code>EMP-2048</code><br>
+                    Password: <code>password123</code>
+                </div>
+                <div class="auth-modal-box">
+                    <strong>HR Support Helpdesk:</strong>
+                    Email: <code>hr-ethics@company.internal</code><br>
+                    Phone: <code>+1 (800) 555-0199 (Ext. 402)</code>
+                </div>
+                <p style="font-size: 12.5px; color: var(--text-muted);">Please have your official employee badge number ready when contacting security.</p>
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button type="button" class="btn-nav btn-nav-primary" onclick="closeHelpModal()">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
